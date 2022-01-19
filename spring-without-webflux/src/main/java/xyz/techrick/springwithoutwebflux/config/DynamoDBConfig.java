@@ -1,6 +1,7 @@
 package xyz.techrick.springwithoutwebflux.config;
 
-
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -18,6 +19,12 @@ public class DynamoDBConfig {
     @Value("${aws.region}")
     private String awsRegion;
 
+    @Value("${aws.access.key}")
+    private String awsAccessKey;
+
+    @Value("${aws.secret.key}")
+    private String awsSecretKey;
+
 
     @Bean
     public DynamoDBMapper dynamoDBMapper() {
@@ -28,7 +35,9 @@ public class DynamoDBConfig {
         return AmazonDynamoDBClientBuilder
                 .standard()
                 .withEndpointConfiguration(
-                        new AwsClientBuilder.EndpointConfiguration(dynamodbEndpoint,awsRegion))
+                        new AwsClientBuilder.EndpointConfiguration(dynamodbEndpoint, awsRegion))
+                .withCredentials(new AWSStaticCredentialsProvider(
+                        new BasicAWSCredentials(awsAccessKey, awsSecretKey)))
                 .build();
     }
 }
