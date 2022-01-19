@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
 import java.net.URI;
@@ -14,7 +15,14 @@ public class DynamoDbConfig {
     private final String dynamoDbEndPointUrl;
     private final String dynamoDbEndPointRegion;
 
-    public DynamoDbConfig(@Value("${dynamodb.endpoint.url}") String dynamoDbEndPointUrl, @Value("${dynamodb.endpoint.region}") String dynamoDbEndPointRegion) {
+    @Value("${aws.access.key}")
+    private String awsAccessKey;
+
+    @Value("${aws.secret.key}")
+    private String awsSecretKey;
+
+    public DynamoDbConfig(@Value("${dynamodb.endpoint.url}") String dynamoDbEndPointUrl,
+                          @Value("${dynamodb.endpoint.region}") String dynamoDbEndPointRegion) {
         this.dynamoDbEndPointUrl = dynamoDbEndPointUrl;
         this.dynamoDbEndPointRegion = dynamoDbEndPointRegion;
     }
@@ -24,6 +32,7 @@ public class DynamoDbConfig {
         return DynamoDbAsyncClient.builder()
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
                 .endpointOverride(URI.create(dynamoDbEndPointUrl))
+                .region(Region.AP_SOUTHEAST_1)
                 .build();
     }
 
