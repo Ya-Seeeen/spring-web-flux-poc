@@ -139,7 +139,10 @@ Then execute the following command to create necessarry tables
     # spring-boot-k8s-12314s   1/1     Running   0           3s
     # spring-boot-k8s-12491s   1/1     Running   0           3s
     ```
-
+   To check details of pods: 
+   ```
+   kubectl get pods -o wide
+   ```
     ```
     #We can check the logs with this:
     kubectl logs -f <pod name>
@@ -326,6 +329,10 @@ First, We will run database instances in different ports to the k8s cluster. Sim
        #NAME                     READY   STATUS    RESTARTS   AGE
        #mysql-565c87ff99-m5hjf   1/1     Running   0          2m49s
         
+       **To get pod details**
+   
+       kubectl get pods -o wide
+   
        **To get the logs:**
         
        kubectl logs -f <pod name>
@@ -370,9 +377,9 @@ First, We will run database instances in different ports to the k8s cluster. Sim
    docker build -t <name>:<tag> .
    ```
 
-6. Now, the app configured yaml (app-deployment.yaml) file needs to be created from project root directory with database configurations and service object which exposes the port.
+6. Now, the app configured yaml (app-deployment.yaml) file needs to be created from project root directory with database configurations and image name and service object which exposes the port.
 
-       ```
+```
        apiVersion: apps/v1
        kind: Deployment
        metadata:
@@ -416,7 +423,7 @@ First, We will run database instances in different ports to the k8s cluster. Sim
              port: 8080 # The port that the service is running on in the cluster
                    targetPort: 8080 # The port exposed by the service
            type: NodePort # type of the service.
-       ```
+   ```
 
 7. Deploy this yaml file (app-deployment.yaml) by the following command and check the status of the deployment object and pods.
 
@@ -426,20 +433,28 @@ First, We will run database instances in different ports to the k8s cluster. Sim
         
        kubectl get deployment
        #if deployment is success
+   
        kubectl get pods
        # checking if all pods are running
+   
+       kubectl get pods -o wide
+       **To get pod details**
+   
        kubectl get services 
        #expose the port
    ```
 
-      Now check from the database if the orders table is created in the schema by the previous way how we got into the pod’s database.
+      Now check from the database if the table (from yaml file) is created in the schema by the previous way how we got into the pod’s database.
+8.   To run the application directly:
+     ```
+     minikube service < service name >
+      ```
+      Add the required endpoints after the url. <br />
+      **Alter way:** From service, the port is exposed. And find the IP using:
 
-      From service, the port is exposed. And find the IP using:
-
-    ```
-       minikube ip
-   ```
-
+      ```
+      minikube ip
+     ```
       Use **https://{minikube ip}/{port}/{required api endpoints from controller}**
 
       If any changes in YAML file are required then do step 7 again and test.
@@ -543,6 +558,9 @@ First, We will run database instances in different ports to the k8s cluster. Sim
         #NAME                     READY   STATUS    RESTARTS   AGE
         #<pod name>   1/1     Running   0          2m49s
         
+        **To get details pods information**
+        kubectl get pods -o wide
+   
         **To get the logs:**
         
         kubectl logs -f <pod name>
@@ -578,7 +596,7 @@ Follow 3-6 steps from section 1.
     docker build -t <name>:<tag> .
     ```
     
-    Now, the yaml (app-deployment.yaml) file needs to be created from project root directory with database configurations and service object which exposes the port. See the sample here:
+    Now, the yaml (app-deployment.yaml) file needs to be created from project root directory with database configurations and created image name and service object which exposes the port. See the sample here:
     
     ```
     apiVersion: v1 # Kubernetes API version
@@ -628,11 +646,18 @@ Follow 3-6 steps from section 1.
     kubectl get pods
     # checking if all pods are running
   
+    kubectl get pods -o wide
+    #get all details of every pod
+  
     kubectl get services 
     #expose the port
     ```
-    
-    From service, the port is exposed. And find the IP using:
+    To run the application directly: 
+    ```
+    minikube service < service name >
+  ```
+  
+    **Alter way:** From service, the port is exposed. And find the IP using:
     
     ```
     minikube ip
