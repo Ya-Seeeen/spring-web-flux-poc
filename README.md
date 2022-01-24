@@ -682,7 +682,7 @@ Configure aws with access key, secret key and region. <br>
     
     ```  
       aws dynamodb list-tables --endpoint-url http://172.17.0.3:31001
-    ```
+  ```
     
   To create table (IP address can be changed according to your system):
    
@@ -690,30 +690,3 @@ Configure aws with access key, secret key and region. <br>
      aws dynamodb --endpoint-url http://172.17.0.3:31001 create-table --table-name Customer --attribute-definitions AttributeName=CustomerID,AttributeType=S --key-schema AttributeName=CustomerID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
   ```
     
-If any changes in YML file are required then do step 7 from section 02 again and test.
-If the codebase is changed then we need to make the .jar file then create image and update the YML file. Finally, deploy and test. The whole process should be re-configured unless a database is changed.
-    
-    **For getting rid of Kubernetes Resources:**
-    
-    [The Kubernetes Handbook](https://www.freecodecamp.org/news/the-kubernetes-handbook/#:~:text=has%20to%20offer.-,Getting%20Rid%20of%20Kubernetes%20Resources,-Now%20that%20you)
-    
-    For completely delete all:
-    
-    ```
-    minikube delete
-    ```
-    
-    To stop minikube:
-    
-    ```
-    minikube stop
-    ```
-    
-    The problems we faced:
-    
-    1. If any db version-related issues come then check the docker images if there are multiple versions are installed. 
-    2. Sometimes images can not be built without sudo. 
-    
-    [Docker-compose: cannot build WITHOUT sudo but I can run containers without it](https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it)
-    
-    [guides/docker-without-sudo.md at main · sindresorhus/guides](https://github.com/sindresorhus/guides/blob/main/docker-without-sudo.md)
