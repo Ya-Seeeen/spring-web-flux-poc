@@ -681,12 +681,13 @@ Configure aws with access key, secret key and region. <br>
   To check table list (IP address can be changed according to your system):
     
     ```  
-      aws dynamodb list-tables --endpoint-url http://172.17.0.3:31001
-  ```
+    aws dynamodb list-tables --endpoint-url http://172.17.0.3:31001
+    ```
     
   To create table (IP address can be changed according to your system):
    
     ```
-     aws dynamodb --endpoint-url http://172.17.0.3:31001 create-table --table-name Customer --attribute-definitions AttributeName=CustomerID,AttributeType=S --key-schema AttributeName=CustomerID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
-  ```
-    
+    aws dynamodb --endpoint-url http://172.17.0.3:31001 create-table --table-name Customer --attribute-definitions AttributeName=CustomerID,AttributeType=S --key-schema AttributeName=CustomerID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+    ```
+
+  That's all. Now, check from kubernetes dashboard.
