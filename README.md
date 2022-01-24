@@ -668,7 +668,7 @@ Follow 3-6 steps from section 1.
 
     For accessing database from integrated terminal:
     ```
-     kubectl exec -it <podName> /bin/bash
+     kubectl exec -it <ProjectPodName> /bin/bash
    ```
     Now, install aws-cli inside this pod.
     ```
