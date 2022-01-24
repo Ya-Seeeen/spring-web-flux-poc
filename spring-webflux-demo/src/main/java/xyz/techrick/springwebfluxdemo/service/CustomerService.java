@@ -1,5 +1,6 @@
 package xyz.techrick.springwebfluxdemo.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +17,7 @@ import static java.time.Instant.now;
 import static xyz.techrick.springwebfluxdemo.utility.Result.FAIL;
 import static xyz.techrick.springwebfluxdemo.utility.Result.SUCCESS;
 
+@Slf4j
 @Service
 public class CustomerService {
 
@@ -28,7 +30,14 @@ public class CustomerService {
     public Mono<Result> createNewCustomer(Customer customer) {
         customer.setCreatedTimeStamp(valueOf(now().getEpochSecond()));
         Result createStatus = customerRepository.save(customer)
-                .handle((__, ex) -> ex == null ? SUCCESS : FAIL)
+                .handle((__, ex) -> {
+                    if (ex == null) {
+                        return SUCCESS;
+                    } else {
+                        log.error("Save error: {}", ex.getMessage(), ex);
+                        return FAIL;
+                    }
+                })
                 .join(); //blocked until data is retrieved
         return Mono.just(createStatus);
 
@@ -84,8 +93,8 @@ public class CustomerService {
     }
 
     public Flux<Customer> getCustomerList() {
-        return Flux.from(customerRepository.getAllCustomer().items())
-                .onErrorReturn(new Customer());
+        return Flux.from(customerRepository.getAllCustomer().items());
+//        return Flux.from(customerRepository.getAllCustomer().items()).onErrorReturn(new Customer());
     }
 
 }
