@@ -688,7 +688,7 @@ Configure aws with access key, secret key and region. <br>
    
     ```
      aws dynamodb --endpoint-url http://172.17.0.3:31001 create-table --table-name Customer --attribute-definitions AttributeName=CustomerID,AttributeType=S --key-schema AttributeName=CustomerID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
-    ```
+  ```
     
 If any changes in YML file are required then do step 7 from section 02 again and test.
 If the codebase is changed then we need to make the .jar file then create image and update the YML file. Finally, deploy and test. The whole process should be re-configured unless a database is changed.
