@@ -483,7 +483,7 @@ First, We will run database instances in different ports to the k8s cluster. Sim
         
     Now, Create Deployment Object using YAML configuration. By this, k8s pulls the database image and runs it in separate k8s pods.
         
-    The sample yaml file ( localstack_deployment.yaml):
+    The sample yaml file (**localstack_deployment.yml**):
         
     ```
         apiVersion: apps/v1
@@ -539,7 +539,7 @@ First, We will run database instances in different ports to the k8s cluster. Sim
     Now, Deploy the yaml file so that all components get created. 
         
     ```
-        kubectl apply -f <yaml file name>
+        kubectl apply -f <yml file name>
         
         #deployment.apps/localstack created
         #service/localstack created
@@ -550,23 +550,24 @@ First, We will run database instances in different ports to the k8s cluster. Sim
     ```
         kubectl get deployments
         
-        #NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+        #NAME         READY   UP-TO-DATE   AVAILABLE   AGE
         #localstack   1/1     1            1           2m43s
         
         kubectl get pods
         
-        #NAME                     READY   STATUS    RESTARTS   AGE
+        #NAME         READY   STATUS    RESTARTS   AGE
         #<pod name>   1/1     Running   0          2m49s
         
         **To get details pods information**
         kubectl get pods -o wide
-   
+        NAME                 READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+        localstack           1/1     Running   0          3h21m   172.17.0.3   minikube   <none>           <none>
+
         **To get the logs:**
-        
         kubectl logs -f <pod name>
    ```
         
-2. **Deploy the spring boot application by deploying the app configuration yaml file. (app-deployment.yaml)**
+2. **Deploy the spring boot application by deploying the app configuration yml file. (app-deployment.yml)**
         
     The “**Application properties**” file needs to be updated by the following way.
         
@@ -577,7 +578,7 @@ First, We will run database instances in different ports to the k8s cluster. Sim
     aws.secret.key=fakeSecretAccessKey
     ```
         
-    Dynamically pod configurations will be added there from the app-deployment yaml file. 
+    Dynamically pod configurations will be added there from the app-deployment yml file. 
         
     After those changes, jar file needs to be created again as there are some changes in code base.
         
@@ -596,48 +597,48 @@ Follow 3-6 steps from section 1.
     docker build -t <name>:<tag> .
     ```
     
-    Now, the yaml (app-deployment.yaml) file needs to be created from project root directory with database configurations and created image name and service object which exposes the port. See the sample here:
+    Now, the yml (app-deployment.yml) file needs to be created from project root directory with database configurations and created image name and service object which exposes the port. See the sample here:
     
     ```
     apiVersion: v1 # Kubernetes API version
     kind: Service # Kubernetes resource kind we are creating
     metadata: # Metadata of the resource kind we are creating
-      name: spring-without-webflux
+      name: spring-webflux-demo
     spec:
       selector:
-        app: spring-without-webflux
+        app: spring-webflux-demo
       ports:
         - protocol: "TCP"
-          port: 9081 # The port that the service is running on in the cluster
-          targetPort: 9081 # The port exposed by the service
+          port: 8080 # The port that the service is running on in the cluster
+          targetPort: 8080 # The port exposed by the service
       type: LoadBalancer # type of the service. LoadBalancer indicates that our service will be external.
     ---
     apiVersion: apps/v1
     kind: Deployment # Kubernetes resource kind we are creating
     metadata:
-      name: spring-without-webflux
+      name: spring-webflux-demo
     spec:
       selector:
         matchLabels:
-          app: spring-without-webflux
+          app: spring-webflux-demo
       replicas: 2 # Number of replicas that will be created for this deployment
       template:
         metadata:
           labels:
-            app: spring-without-webflux
+            app: spring-webflux-demo
         spec:
           containers:
-            - name: spring-without-webflux
-              image: spring-without-webflux:1.5 # Image that will be used to containers in the cluster
+            - name: spring-webflux-demo
+              image: spring-webflux-demo:1.0 # Image that will be used to containers in the cluster
               imagePullPolicy: IfNotPresent
               ports:
-                - containerPort: 9081
+                - containerPort: 8080
     ```
     
-    Now, we are going to deploy the yaml file by the following command and check the deployment object, pods and services:
+    Now, we are going to deploy the yml file by the following command and check the deployment object, pods and services:
     
     ```
-    kubectl apply -f app-deployment.yaml
+    kubectl apply -f app-deployment.yml
     #spring-without-webflux created
     
     kubectl get deployment
@@ -654,7 +655,7 @@ Follow 3-6 steps from section 1.
     ```
     To run the application directly: 
     ```
-    minikube service < service name >
+    minikube service <serviceName >
   ```
   
     **Alter way:** From service, the port is exposed. And find the IP using:
