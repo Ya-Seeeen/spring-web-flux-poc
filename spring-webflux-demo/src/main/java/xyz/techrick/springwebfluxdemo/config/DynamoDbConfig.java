@@ -13,7 +13,6 @@ import java.net.URI;
 @Configuration
 public class DynamoDbConfig {
     private final String dynamoDbEndPointUrl;
-    private final String dynamoDbEndPointRegion;
 
     @Value("${aws.accessKeyId}")
     private String awsAccessKey;
@@ -21,10 +20,8 @@ public class DynamoDbConfig {
     @Value("${aws.secretAccessKey}")
     private String awsSecretKey;
 
-    public DynamoDbConfig(@Value("${dynamodb.endpoint.url}") String dynamoDbEndPointUrl,
-                          @Value("${dynamodb.endpoint.region}") String dynamoDbEndPointRegion) {
+    public DynamoDbConfig(@Value("${dynamodb.endpoint.url}") String dynamoDbEndPointUrl) {
         this.dynamoDbEndPointUrl = dynamoDbEndPointUrl;
-        this.dynamoDbEndPointRegion = dynamoDbEndPointRegion;
     }
 
     @Bean
